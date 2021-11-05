@@ -53,17 +53,6 @@ class Player(pygame.sprite.Sprite):
             player.move(0, -steps)
         if key == pygame.K_DOWN:
             player.move(0, steps)
-    
-        '''
-        if key == pygame.K_RIGHT:
-            player.move(-steps, 0)
-        if key == pygame.K_LEFT:
-            player.move(steps, 0)
-        if key == pygame.K_UP:
-            player.move(0, steps)
-        if key == pygame.K_DOWN:
-            player.move(0, -steps)      
-        '''    
 
 class Bullets(pygame.sprite.Sprite):
     def __init__(self):
@@ -119,18 +108,7 @@ def main():
             
             if event.type == pygame.KEYDOWN:
                 player.moving(event.key)
-                        
-            '''
-            if event.type == pygame.KEYUP:
-                if event.key == pygame.K_RIGHT:
-                    player.move(-steps, 0)
-                if event.key == pygame.K_LEFT:
-                    player.move(steps, 0)
-                if event.key == pygame.K_UP:
-                    player.move(0, steps)
-                if event.key == pygame.K_DOWN:
-                    player.move(0, -steps)  
-            '''
+                             
         player.update()
         bullets.update()
         world.blit(backdrop, backdropbox)
