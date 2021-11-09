@@ -57,13 +57,12 @@ player_list.add(player)
 steps = 3
 
 
-obstacle = Obstacles(0, 0) 
+obstacle1 = Obstacles(-300, 0) 
 obstacles_list = pygame.sprite.Group()
-obstacles_list.add(obstacle)
-
+obstacles_list.add(obstacle1)
+obstacle2 = Obstacles(800, 0)
+obstacles_list.add(obstacle2)
 # obstacles
-
-
 
 #main
 
@@ -77,11 +76,15 @@ def main():
             if event.type == pygame.KEYDOWN:
                 player.moving(event.key, steps)
                 if event.key == K_q: #113 = q 
-                    obstacle.falling(event.key) 
-        if obstacle.rect.y > worldy:
-            obstacle.rect.y = 0 - obstacle.rect.height
+                    obstacle1.falling(event.key)
+                    obstacle2.falling(event.key) 
+        if obstacle1.rect.y > worldy:
+            obstacle1.rect.y = 0 - obstacle1.rect.height
+        if obstacle2.rect.y > worldy:
+            obstacle2.rect.y = 0 - obstacle2.rect.height    
              
-        obstacle.update()
+        obstacle1.update()
+        obstacle2.update()
         player.update()
         world.blit(backdrop, backdropbox)
         player_list.draw(world)
