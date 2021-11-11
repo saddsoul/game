@@ -5,7 +5,8 @@ from player import Player
 from obstacles import Obstacles
 from pygame.locals import K_q
 import random
-#zmienne
+
+# Setup
 
 worldx = 1600
 worldy = 900
@@ -20,24 +21,6 @@ YELLOW = (255, 255, 0)
 CYAN = (0, 255, 255)
 MAGENTA = (255, 0, 255) 
 
-#klasy
-
-
-        
-
-class Bullets(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-          
-        self.images = []
-        bulletimage = pygame.image.load("bullet.png").convert()
-        self.images.append(bulletimage)
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
-        self.movex = 0
-        self.movey = 0
-        
-
 # Setup
 
 pygame.display.set_caption("bullethellproject")
@@ -48,21 +31,21 @@ backdrop = pygame.image.load("background.jpg")
 backdropbox = world.get_rect()
 screen_rect = pygame.Rect((0, 0), (worldx, worldy))
 pygame.mouse.set_visible(False)
+
 # gracz
 
 player = Player(800, 450)
-
 player_list = pygame.sprite.Group()
 player_list.add(player)
 steps = 3
 
+# obstacles
 
 obstacle1 = Obstacles(-300, 0) 
 obstacles_list = pygame.sprite.Group()
 obstacles_list.add(obstacle1)
 obstacle2 = Obstacles(800, 0)
 obstacles_list.add(obstacle2)
-# obstacles
 
 #main
 
@@ -80,9 +63,13 @@ def main():
                     obstacle2.falling(event.key) 
         if obstacle1.rect.y > worldy:
             obstacle1.rect.y = 0 - obstacle1.rect.height
-        if obstacle2.rect.y > worldy:
-            obstacle2.rect.y = 0 - obstacle2.rect.height    
-             
+            obstacleposition = random.randint(-900, 100)
+            obstacle1.rect.x = obstacleposition
+            obstacle2position = obstacleposition + 1100
+            if obstacle2.rect.y > worldy:
+                obstacle2.rect.y = 0 - obstacle2.rect.height
+                obstacle2.rect.x = obstacle2position  
+            
         obstacle1.update()
         obstacle2.update()
         player.update()
