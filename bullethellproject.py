@@ -1,6 +1,10 @@
 import pygame
+from pygame import sprite
 from pygame.constants import KEYDOWN
-
+from player import Player
+from obstacles import Obstacles
+from pygame.locals import K_q
+import random
 #zmienne
 
 worldx = 1600
@@ -18,47 +22,13 @@ MAGENTA = (255, 0, 255)
 
 #klasy
 
-class Player(pygame.sprite.Sprite):
-    def __init__(self):
-        pygame.sprite.Sprite.__init__(self)
-        self.images = []
 
-        img = pygame.image.load("ship3.png").convert()
-        img.convert_alpha()
-        img.set_colorkey((255, 255 ,255))
-        self.images.append(img)
-        self.image = self.images[0]
-        self.rect = self.image.get_rect()
-        self.movex = 0
-        self.movey = 0
         
-    def move(self, x, y):
-        self.movex += x
-        self.movey += y 
-           
-    def update(self):
-        self.rect.x = self.rect.x + self.movex
-        self.rect.y = self.rect.y + self.movey
-        self.rect.clamp_ip(screen_rect)
-    
-    def shoot(self):
-        self.bullets
-        
-    def moving(self,key):
-        if key == pygame.K_RIGHT:
-            player.move(steps, 0)
-        if key == pygame.K_LEFT:
-            player.move(-steps, 0)
-        if key == pygame.K_UP:
-            player.move(0, -steps)
-        if key == pygame.K_DOWN:
-            player.move(0, steps)
 
 class Bullets(pygame.sprite.Sprite):
     def __init__(self):
         pygame.sprite.Sprite.__init__(self)
-        
-        
+          
         self.images = []
         bulletimage = pygame.image.load("bullet.png").convert()
         self.images.append(bulletimage)
@@ -76,26 +46,23 @@ pygame.init()
 world = pygame.display.set_mode([worldx, worldy])
 backdrop = pygame.image.load("background.jpg") 
 backdropbox = world.get_rect()
-screen_rect = pygame.Rect((0, 0), (1600, 900))
+screen_rect = pygame.Rect((0, 0), (worldx, worldy))
 pygame.mouse.set_visible(False)
 # gracz
 
-player = Player()
-player.rect.x = 800
-player.rect.y = 450
+player = Player(800, 450)
+
 player_list = pygame.sprite.Group()
 player_list.add(player)
 steps = 3
 
 
-
-#bullets
-
-bullets = Bullets()
-bullets.rect.x = 0
-bullets.rect.y = 0
-bullets_list = pygame.sprite.Group()
-bullets_list.add(bullets)
+obstacle1 = Obstacles(-300, 0) 
+obstacles_list = pygame.sprite.Group()
+obstacles_list.add(obstacle1)
+obstacle2 = Obstacles(800, 0)
+obstacles_list.add(obstacle2)
+# obstacles
 
 #main
 
@@ -107,12 +74,21 @@ def main():
                 running = False
             
             if event.type == pygame.KEYDOWN:
-                player.moving(event.key)
-                             
+                player.moving(event.key, steps)
+                if event.key == K_q: #113 = q 
+                    obstacle1.falling(event.key)
+                    obstacle2.falling(event.key) 
+        if obstacle1.rect.y > worldy:
+            obstacle1.rect.y = 0 - obstacle1.rect.height
+        if obstacle2.rect.y > worldy:
+            obstacle2.rect.y = 0 - obstacle2.rect.height    
+             
+        obstacle1.update()
+        obstacle2.update()
         player.update()
-        bullets.update()
         world.blit(backdrop, backdropbox)
         player_list.draw(world)
+        obstacles_list.draw(world)
         pygame.display.flip()
         clock.tick(fps)
 main()
