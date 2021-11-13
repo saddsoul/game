@@ -5,6 +5,7 @@ from player import Player
 from obstacles import Obstacles
 from pygame.locals import K_q
 import random
+# from collisiondetection import aabb_collision
 
 # Setup
 
@@ -57,19 +58,27 @@ def main():
                 running = False
             
             if event.type == pygame.KEYDOWN:
+             
                 player.moving(event.key, steps)
                 if event.key == K_q: #113 = q 
                     obstacle1.falling(event.key)
-                    obstacle2.falling(event.key) 
+                    obstacle2.falling(event.key)
+
+        if pygame.sprite.collide_rect(player, obstacle1):
+            running = False
+        if pygame.sprite.collide_rect(player, obstacle2):
+            running = False
+
+
         if obstacle1.rect.y > worldy:
             obstacle1.rect.y = 0 - obstacle1.rect.height
             obstacleposition = random.randint(-900, 100)
             obstacle1.rect.x = obstacleposition
-            obstacle2position = obstacleposition + 1100
+            obstacle2position = obstacleposition + 1300
             if obstacle2.rect.y > worldy:
                 obstacle2.rect.y = 0 - obstacle2.rect.height
                 obstacle2.rect.x = obstacle2position  
-            
+                
         obstacle1.update()
         obstacle2.update()
         player.update()
