@@ -1,5 +1,6 @@
 import pygame
 from pygame.constants import KEYDOWN
+import math
 
 
 screen_rect = pygame.Rect((0, 0), (1600, 900))
@@ -45,3 +46,5 @@ class Player(pygame.sprite.Sprite):
             if self.movey < 0:
                 self.movey = 0
             self.move(0, steps)
+
+    
