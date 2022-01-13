@@ -5,10 +5,11 @@ from player import Player
 from obstacles import Obstacles
 from pygame.locals import K_q
 import random
-# from collisiondetection import aabb_collision
+import time
 
 # Setup
 
+timer = 0
 worldx = 1600
 worldy = 900
 fps = 60
@@ -21,6 +22,8 @@ BLUE = (0, 0, 255)
 YELLOW = (255, 255, 0)
 CYAN = (0, 255, 255)
 MAGENTA = (255, 0, 255) 
+pygame.font.init()
+font = pygame.font.Font('freesansbold.ttf', 32)
 
 # Setup
 
@@ -42,47 +45,53 @@ steps = 3
 
 # obstacles
 
-obstacle1 = Obstacles(-300, 0) 
 obstacles_list = pygame.sprite.Group()
-obstacles_list.add(obstacle1)
-obstacle2 = Obstacles(800, 0)
-obstacles_list.add(obstacle2)
 
 #main
+def spawning_obstacles():           
+        y = Obstacles(random.randint(0,1600), 0)
+        obstacles_list.add(y)
+        y.falling(K_q)  
 
+def highscore_display(x, y):
+    score = font.render("Score :" + str(timer), True, (255, 255, 255))
+    world.blit(score, (x, y))
+    hs_file = open("highscores.txt","r+")
+    highscore = font.render("Highscore :" + str(hs_file.read()), True, (255, 255, 255))
+    world.blit(highscore, (x+100, y+100))
+    hs_file.close()
+    
 def main():
     running = True
     while running:
+        hs_file = open("highscores.txt","r+")
+        global timer
+        timer = timer + 1
+        if timer % 8 == 0:
+            
+            spawning_obstacles()
         for event in pygame.event.get():
             if event.type == pygame.QUIT:
                 running = False
             
             if event.type == pygame.KEYDOWN:
-             
                 player.moving(event.key, steps)
-                if event.key == K_q: #113 = q 
-                    obstacle1.falling(event.key)
-                    obstacle2.falling(event.key)
+                if event.key == K_q:
+                    spawning_obstacles()
 
-        if pygame.sprite.collide_rect(player, obstacle1):
+        if pygame.sprite.spritecollide(player, obstacles_list, True):            
+            highscore = hs_file.read()
+            if timer>int(highscore):
+                hs_file.seek(0)
+                hs_file.truncate(0)
+                hs_file.write(str(timer))
+            hs_file.close()
             running = False
-        if pygame.sprite.collide_rect(player, obstacle2):
-            running = False
-
-
-        if obstacle1.rect.y > worldy:
-            obstacle1.rect.y = 0 - obstacle1.rect.height
-            obstacleposition = random.randint(-900, 100)
-            obstacle1.rect.x = obstacleposition
-            obstacle2position = obstacleposition + 1300
-            if obstacle2.rect.y > worldy:
-                obstacle2.rect.y = 0 - obstacle2.rect.height
-                obstacle2.rect.x = obstacle2position  
-                
-        obstacle1.update()
-        obstacle2.update()
+    
+        obstacles_list.update()
         player.update()
         world.blit(backdrop, backdropbox)
+        highscore_display(10, 10)
         player_list.draw(world)
         obstacles_list.draw(world)
         pygame.display.flip()
