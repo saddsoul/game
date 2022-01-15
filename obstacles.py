@@ -1,7 +1,7 @@
 import pygame
 import random
 
-obstacles_list = pygame.sprite.Group()
+#obstacles_list = pygame.sprite.Group()
 
 class Obstacles(pygame.sprite.Sprite):
     
@@ -25,7 +25,7 @@ class Obstacles(pygame.sprite.Sprite):
         self.rect.y = self.rect.y + self.movey
   
     def falling(self, key):
-        if key == pygame.K_q or key == 1337420:
+        if key == pygame.K_q:
             self.move(random.randint(3,5))
     
     
