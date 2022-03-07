@@ -1,9 +1,10 @@
 import pygame
 from pygame.constants import KEYDOWN
 import math
-
+from bullets import Bullets
 
 screen_rect = pygame.Rect((0, 0), (1600, 900))
+
 
 class Player(pygame.sprite.Sprite):
 
@@ -33,18 +34,23 @@ class Player(pygame.sprite.Sprite):
         if key == pygame.K_RIGHT:
             if self.movex < 0:
                 self.movex = 0
+                return
             self.move(steps, 0)
         if key == pygame.K_LEFT:
             if self.movex > 0:
                 self.movex = 0
+                return
             self.move(-steps, 0)
         if key == pygame.K_UP:
             if self.movey > 0:
                 self.movey = 0
+                return
             self.move(0, -steps)
         if key == pygame.K_DOWN:
             if self.movey < 0:
                 self.movey = 0
+                return
             self.move(0, steps)
-
     
+   
+        

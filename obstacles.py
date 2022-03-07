@@ -1,4 +1,7 @@
 import pygame
+import random
+
+#obstacles_list = pygame.sprite.Group()
 
 class Obstacles(pygame.sprite.Sprite):
     
@@ -14,17 +17,15 @@ class Obstacles(pygame.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.movey = 0
-
+     
     def move(self, y):
         self.movey +=y     
-
+      
     def update(self):
         self.rect.y = self.rect.y + self.movey
-
+  
     def falling(self, key):
         if key == pygame.K_q:
-            self.move(5)
-        if key == pygame.K_a:
-            self.move(10)
-        if key == pygame.K_z:
-            self.move(15)        
+            self.move(random.randint(3,5))
+    
+    
