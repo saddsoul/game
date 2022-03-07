@@ -7,6 +7,7 @@ from pygame.locals import K_q
 import random
 import time
 from bullets import Bullets
+
 # Setup
 
 timer = 0
